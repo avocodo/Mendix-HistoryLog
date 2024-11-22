@@ -83,11 +83,11 @@ When the Health Check Scheduler is activated, the History Log module scans daily
 
 ### <a name="possibleIssues">Possible Issues</a>
 
-- OQL Errors
+- **OQL Errors**
     - Update the layout of three pages: `ExamplePerson_NewEdit`, `ExampleOQL_Result`, `Example_Overview`.
-- Update All Widgets
+**- Update All Widgets**
     - Right-click the mouse → select "Update all Widgets".
-- No argument has been selected for Parameter ‘Token’ and no default is available (SNIP_EmailTemplate_NewEdit)
+- **No argument has been selected for Parameter ‘Token’ and no default is available (`SNIP_EmailTemplate_NewEdit`)**
     - Edit the action button "Edit" and open the page settings to update the settings.
     - Update all renamed design properties in the project.
 
@@ -107,139 +107,135 @@ When the Health Check Scheduler is activated, the History Log module scans daily
                 - `ModelAdministrator` from MxModelReflection
                 - Optional: `EmailConnectorAdmin` from Email_Connector
             - **User:**
-                - User from the HistoryLogModule
-                - Readonly from MxModelReflection
+                - `User` from the HistoryLogModule
+                - `Readonly` from MxModelReflection
     - **Start Microflow für Health Check**
-        - To run the Health Check at the start of the app, it must be configured in the settings. Under Settings → Runtime, configure the microflow HistoryLogModule → _UseMe → StartUp_HealthCheck in "After Startup".
+        - To run the Health Check at the start of the app, it must be configured in the settings. Under `Settings → Runtime`, configure the microflow `HistoryLogModule → _UseMe → StartUp_HealthCheck` in "After Startup".
         - If a microflow is already configured, the microflow can simply be added at the end.
 
 ![Image 1: Start Microflow for the Health Check](screenshots/Image_01.png)
+Image 1: Start Microflow for the Health Check
 
 
 ## <a name="usageWithoutEmail">Usage without Email Connector</a>
 
+**The following adjustments need to be made:**
+- `_UseMe → Overview` → Delete the Mailconfiguration section along with the surrounding container (Image 2).
+- Delete the folder `RelevantForEmailNotification → EmailNotification` or exclude the microflows (Image 3).
+- Exclude or delete `RelevantForEmailNotification → ConfigurationStart → ACT_EmailAccount_LaunchEmailConnectorOverview` 
+- Delete the activity `RelevantForEmailNotification → ConfigurationStart → ACT_SaveAndCloseStepConfig` (Image 4).
+- Delete the buttons `RelevantForEmailNotification → ConfigurationStart → Step_3_SchedulerSettings` (Image 5).
+- Delete or exclude `RelevantForEmailNotification → ConfigurationStart → Step_4_MailConnector`.
+- Delete the button `RelevantForEmailNotification → Settings → Overview_Settings` (Image 6).
+- Delete the activity `RelevantForEmailNotification → HealthCheckFlows → SUB_UpdateSetting` (Image 7).
 
-The following adjustments need to be made:
-
-    _UseMe → Overview → Delete the Mailconfiguration section along with the surrounding container (Image 2).
-
-    Delete the folder RelevantForEmailNotification → EmailNotification or exclude the microflows (Image 3).
-
-    Exclude or delete RelevantForEmailNotification → ConfigurationStart → ACT_EmailAccount_LaunchEmailConnectorOverview 
-
-    Delete the activity RelevantForEmailNotification → ConfigurationStart → ACT_SaveAndCloseStepConfig (Image 4).
-
-    Delete the buttons RelevantForEmailNotification → ConfigurationStart → Step_3_SchedulerSettings (Image 5).
-
-    Delete or exclude RelevantForEmailNotification → ConfigurationStart → Step_4_MailConnector.
-
-    Delete the button RelevantForEmailNotification → Settings → Overview_Settings (Image 6).
-
-    Delete the activity RelevantForEmailNotification → HealthCheckFlows → SUB_UpdateSetting (Image 7).
-
-If it is decided later to use the mail notification, the module can simply be reloaded from the Marketplace.
+> [!NOTE]
+> If it is decided later to use the mail notification, the module can simply be reloaded from the Marketplace.
 
  
 ![Image 2: _UseMe/Overview → Delete the Mailconfiguration section along with the surrounding container.](screenshots/Image_02.png)
+Image 2: _UseMe/Overview → Delete the Mailconfiguration section along with the surrounding container.
 
 ![Image 3: Delete the folder RelevantForEmailNotification/EmailNotification or exclude the microflows.](screenshots/Image_03.png)
+Image 3: Delete the folder RelevantForEmailNotification/EmailNotification or exclude the microflows.
 
 ![Image 4: Delete Activity RelevantForEmailNotification/ConfigurationStart/ACT_SaveAndCloseStepConfig](screenshots/Image_04.png)
+Image 4: Delete Activity RelevantForEmailNotification/ConfigurationStart/ACT_SaveAndCloseStepConfig
  
 ![Image 5: Delete Buttons RelevantForEmailNotification/ConfigurationStart/Step_3_SchedulerSettings](screenshots/Image_05.png)
+Image 5: Delete Buttons RelevantForEmailNotification/ConfigurationStart/Step_3_SchedulerSettings
  
 ![Image 6: Delete Buttons RelevantForEmailNotification/Settings/Overview_Settings](screenshots/Image_06.png)
+Image 6: Delete Buttons RelevantForEmailNotification/Settings/Overview_Settings
  
 ![Image 7: Delete Activity RelevantForEmailNotification/HealthCheckFlows/SUB_UpdateSetting](screenshots/Image_07.png)
+Image 7: Delete Activity RelevantForEmailNotification/HealthCheckFlows/SUB_UpdateSetting
 
 ## <a name="basicConfig">Basic Configuration of the History Log Module</a>
-
 ### <a name="setGeneralization">Set Generalization</a>
-
 
 All entities in the Domain Model (Image 8) that should be tracked by the History Log need to be generalized with the SuperClass from the HistoryLog Module. To do this, open the entity settings in the Domain Model and select the SuperClass from the HistoryLogModule under Generalization (Image 9).
 
 Once all desired entities are generalized, click the "Update Security" button (Image 10).
  
 ![Image 8: Domain Model](screenshots/Image_08.png)
+Image 8: Domain Model
 
 ![Image 9: Select Generalization](screenshots/Image_09.png)
+Image 9: Select Generalization
 
 ![Image 10: Update Security](screenshots/Image_10.png)
+Image 10: Update Security
 
 ### <a name="setEventHandler">Set Event Handlers on Already Generalized Entities</a> 
 
-If the entity is used for file management and thus already has a generalization, the corresponding microflows for FileDocument or Image must be used.
-Open the entity: Event handlers → New
+If the entity is used for file management and thus already has a generalization, the corresponding microflows for `FileDocument` or `Image` must be used.
 
-    For existing System.Image generalization:
-
-        HistoryLogModule → _UseMe → BCo_SystemImage
-        Before Commit & Pass event object yes
-
-        HistoryLogModule → _UseMe → BDe_SystemImage
-        Before Delete & Pass event object yes
-
-    For existing System.FileDocument generalization:
-
-        HistoryLogModule → _UseMe → BCo_SystemFileDocument
-
-        Before Commit & Pass event object yes
-
-        HistoryLogModule → _UseMe → BDe_SystemFileDocument
-
-        Before Delete & Pass event object yes
+Open the entity: `Event handlers → New`
+- For existing `System.Image` generalization:
+    - `HistoryLogModule → _UseMe → BCo_SystemImage`<br>
+    Before Commit & Pass event object yes
+    - `HistoryLogModule → _UseMe → BDe_SystemImage`<br>
+    Before Delete & Pass event object yes
+- For existing `System.FileDocument` generalization:
+    - `HistoryLogModule → _UseMe → BCo_SystemFileDocument`<br>
+    Before Commit & Pass event object yes
+    - `HistoryLogModule → _UseMe → BDe_SystemFileDocument`<br>
+    Before Delete & Pass event object yes
 
 ![Bild 11: Event Handler von Entities](screenshots/Image_11.png)
+Bild 11: Event Handler von Entities
 
 ### <a name="scheduler">Scheduler</a>
 
 When the app is deployed, the following schedulers should be activated on the Mendix App management page:
 
-    HistoryLogModule.SCE_Archive (daily at 1:15 AM)
+- `HistoryLogModule.SCE_Archive` (daily at 1:15 AM)
+- `HistoryLogModule.SCE_HealthCheck` (daily at 1:00 AM)
 
-    HistoryLogModule.SCE_HealthCheck (daily at 1:00 AM)
+**Activation via the Mendix platform:** Mendix Platform [Mendix](https://cloud.home.mendix.com/)
+1. Open the app
+2. Go to Environments
+3. Go to Details of Acceptance or Production
+4. Go to Model Options
+5. Double-click on both schedulers
 
-Activation via the Mendix platform: Mendix Platform [Mendix](https://cloud.home.mendix.com/)
-
-    Open the app
-
-    Environments
-
-    Details of Acceptance or Production
-
-    Model Options
-
-    Double-click on both schedulers
-
-The times can be adjusted in the app under HistoryLogModule/_UseMe -> SCE_Archive & SCE_HealthCheck. It is recommended to run the schedulers at times when few or no users are actively using the app, with a time offset.
+The times can be adjusted in the app under `HistoryLogModule/_UseMe -> SCE_Archive` & `SCE_HealthCheck`. It is recommended to run the schedulers at times when few or no users are actively using the app, with a time offset.
 
 ### <a name="firstConfigSteps">First configuration Steps</a>
 
 ![Image 12: Overview Page History Log](screenshots/Image_12.png)
+Image 12: Overview Page History Log
+
 The "first configuration steps" guide you through the basic configuration. These include Sync Entities, Define Modules, Settings, and optionally proceed to Mail Configuration. The individual steps are described in more detail below.
 
 
 ### <a name="syncEntities">Sync Entities</a>
 
 ![Image 13: Overview Page History Log](screenshots/Image_13.png)
+Image 13: Overview Page History Log
+
 Under Sync Entities, modules can be synchronized and individual entities imported. The logic for synchronization is based on the Mx Model Reflection Module [Mx Model Reflection](https://docs.mendix.com/appstore/modules/model-reflection/).
 
 ![Image 14: Sync Entity Page](screenshots/Image_14.png)
+Image 14: Sync Entity Page
+
 In the left column, the modules that have entities with generalization need to be checked. If the Email Connector is used in the context of the History Log, the HistoryLogModule must also be checked.
 
 To ensure that the current version is displayed, the first Reload button next to Modules should be clicked. After selection, click the Reload button next to "Synchronize all entities of checked modules on the left". The list of entities will then appear or update.
 
-Entities with a generalization of SuperClass, FileDocument, or Image can be imported and are marked with a purple x or an orange file symbol. Entities that cannot be imported into the History Log Module are marked with a red x. Already imported entities are marked with a green checkmark and can be updated with the "Sync Entity" button. Entities from the History Log cannot be imported.
+Entities with a generalization of `SuperClass`, `FileDocument`, or `Image` can be imported and are marked with a purple x or an orange file symbol. Entities that cannot be imported into the History Log Module are marked with a red x. Already imported entities are marked with a green checkmark and can be updated with the "Sync Entity" button. Entities from the History Log cannot be imported.
 
 ![Image 15: Sync Entity Page - Example with File Generalization](screenshots/Image_15.png)
+Image 15: Sync Entity Page - Example with File Generalization
 
-Entities with a FileDocument or Image generalization also have a note that the event handlers must be set for tracking to work properly. More on this under "Set Event Handlers on Already Generalized Entities".
+Entities with a `FileDocument` or `Image` generalization also have a note that the event handlers must be set for tracking to work properly. More on this under "Set Event Handlers on Already Generalized Entities".
 
 
 If the notification via the Email Connector is used, the History Log Module must also be synchronized, as the template for the generated email accesses content from the module. To do this, check the History Log Module in the left column. Nothing more is necessary here.
 
 ![Image 16: Sync Entity Page](screenshots/Image_16.png)
+Image 16: Sync Entity Page
 
 Synchronization should definitely be done BEFORE importing the template, as the set attributes are then automatically adopted.
 
@@ -247,7 +243,12 @@ Synchronization should definitely be done BEFORE importing the template, as the 
 ### <a name="defineModule">Define Module</a>
 
 ![Image 17: Overview Page History Log](screenshots/Image_17.png)
+Image 17: Overview Page History Log
+
 "Define Module" is the core. Here you can decide what should be tracked and how.
+
+![Image 18: Define Entities](screenshots/Image_18.png)
+Image 18: Define Entities
 
 In principle, the function can be activated/deactivated by clicking on the reload icon. On the right side, you can then decide for the selected entity whether creation and/or deletion should be tracked.
 
@@ -255,111 +256,110 @@ Under the "Attributes" tab, you can individually decide for each attribute wheth
 
 The entity can be removed from logging, which does not delete any already saved changes. It only removes the entity from logging and deletes saved information about imported references and attributes. This can be used if a generalization is removed and the Health Check is not configured as a start microflow. In other cases, it is not advisable to delete the entity. Instead, it is better to disable tracking.
 
-![Image 18: Define Entities](screenshots/Image_18.png)
-
-
- 
+ ![Image 19: Define Entities](screenshots/Image_19.png)
+Image 19: Define Entities
 
 Under the "References" tab, you can select which references should be tracked. A custom name can be given to the reference under DisplayName. The reference can be removed from tracking with the red x button. The reference can be updated with the button with the two arrows.
 
 To track the reference, select the reference by clicking the checkbox, then choose the display name in the right column. This display name is used to show which reference the value has changed to. Calculated attributes cannot be selected here either.
-![Image 19: Define Entities](screenshots/Image_19.png)
 
-
- 
+![Image 20: Define Entities](screenshots/Image_20.png)
+Image 20: Define Entities
 
 > [!IMPORTANT]
 > If creation/deletion is to be tracked, an attribute with DisplayName must be activated for tracking.
-![Image 20: Define Entities](screenshots/Image_20.png)
-
 
 ### <a name="settings02">Settings</a>
 
+![Image 21: Overview Page History Log](screenshots/Image_21.png)
+Image 21: Overview Page History Log
 
 Under Settings, the Email Connector can be enabled or disabled for notifications. Additionally, backups can be configured here.
-![Image 21: Overview Page History Log](screenshots/Image_21.png)
 
 
- 
-
- 
+ ![Bild 22: Settings](screenshots/Image_22.png)
+Bild 22: Settings
 
 By default, all tracking entries older than 90 days or if there are more than 50,000 tracking entries in the database, are exported as PDFs and deleted from the database.
 
 These values can be adjusted by the administrator. A PDF is generated for each entry with all relevant information. The backup date, the GuId of the original entry, and the configured display name (in shortened form) are used for identifying the PDFs.
-![Bild 22: Settings](screenshots/Image_22.png)
-
 
 ### <a name="settingEmailCon">Settings with the Email Connector</a>
 
+![Bild 23: Setting Mail Notification](screenshots/Image_23.png)
+Bild 23: Setting Mail Notification
 
 If automated emails are to be sent via the Health Check, the Email Connector can be activated at any time. The prerequisite is that the Email Connector module and EncryptionKey have been imported and configured from the Marketplace during configuration.
 
 The app URL is included in the email, so it must be stored in the settings.
-![Bild 23: Setting Mail Notification](screenshots/Image_23.png)
 
-
- 
+ ![Image 24: Email Connector](screenshots/Image_24.png)
+Image 24: Email Connector
 
 If the Email Connector is used solely for notifications from the History Log Module, only the addition of the mail account is necessary. The rest is already preconfigured in the History Log Module.
 
-    After "Get Started," you will be redirected to the configuration of the Email Connector (Image 25). Here you select which mail account you want to integrate.
+1. After "Get Started," you will be redirected to the configuration of the Email Connector (Image 25). Here you select which mail account you want to integrate.
 
-    In step 2 (under Basic Credentials), set the display name, your email address from which the emails should be sent, and the password. A shared mailbox is not necessary for the History Log Module (Image 26).
+2. In step 2 (under Basic Credentials), set the display name, your email address from which the emails should be sent, and the password. A shared mailbox is not necessary for the History Log Module (Image 26).
 
-    In step 3, configure only the "Send Emails" section. Here you need to set the protocol, server host, server port, and encryption. For a Microsoft Office365 account, you can find the information at Microsoft (POP, IMAP, and SMTP settings for [Microsoft Support](https://support.microsoft.com/de-de/office/pop-imap-und-smtp-einstellungen-f%C3%BCr-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040)).
+3. In step 3, configure only the "Send Emails" section. Here you need to set the protocol, server host, server port, and encryption. For a Microsoft Office365 account, you can find the information at Microsoft (POP, IMAP, and SMTP settings for [Microsoft Support](https://support.microsoft.com/de-de/office/pop-imap-und-smtp-einstellungen-f%C3%BCr-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040)).
 
 > [!IMPORTANT]
 > If you use the Email Connector to receive emails or in other areas of your app, or if you have problems with the configuration, please follow the documentation. [Email Connector](https://docs.mendix.com/appstore/modules/email-connector/)
 
-![Image 24: Email Connector](screenshots/Image_24.png)
-
 ![Image 25](screenshots/Image_25.png)
+Image 25
 
 ![Image 26](screenshots/Image_26.png)
+Image 26
 
 ![Image 27](screenshots/Image_27.png)
-
+Image 27
 
 ### <a name="importMailTemp">Import Email Template with Email Connector</a>
 
+![Image 28](screenshots/Image_28.png) 
+Image 28
 
 There is a pre-made template that can be imported via "Email Templates" (top right button).
- 
-![Image 28](screenshots/Image_28.png) 
+
+![Image 29](screenshots/Image_29.png)
+Image 29
 
 The template "My first template" can be deleted.
 
 For the import, click the "Import" button (Image 28) and select and import the file under resources -> historyLog -> Template_SystemCriticalMail.xml.
 
- 
-![Image 29](screenshots/Image_29.png)
- 
 ![Image 30](screenshots/Image_30.png)
+Image 30
+
+![Image 31](screenshots/Image_31.png)
+![Image 32](screenshots/Image_32.png)
+Image 31
 
 In the template, a "Reply To" and a "From Address" must be specified. The "From Name" and the "Subject" can be changed.
 
-Add To, CC, BCC: The recipient must be defined here.
+> [!CAUTION]
+> Add To, CC, BCC: The recipient must be defined here.
+> The template name must not be changed, otherwise the email cannot be sent automatically (Image 31).
 
-The template name must not be changed, otherwise the email cannot be sent automatically (Image 31).
-
-The template (Image 32) can be adjusted as needed. It is important that the placeholders and variables in the text are not changed.
+The template (Image 31) can be adjusted as needed. It is important that the placeholders and variables in the text are not changed.
 
 After adjusting the text, click on the "Plain Text" tab and synchronize the text there.
-![Image 31](screenshots/Image_31.png)
-
- 
-![Image 32](screenshots/Image_32.png)
 
 The final step of the email configuration is done on the History Log Module Overview Page.
 
 Here, a list of defined mail accounts appears next to the Email Connector field. Click on the bell to activate the account from which the emails should be sent.
-![Image 33](screenshots/Image_33.png)
+
+![Image 33](screenshots/Image_332.png)
+Image 33
 
 ## <a name="views">Views</a>
 
 ### <a name="changesChangeEntitie">Changes (Sort by imported Change Entities)</a>
+
 ![Image 34](screenshots/Image_34.png)
+Image 34
 
 Under the menu item "Changes (Sort by imported Change Entities)," all entries based on individual entries and associated changes can be viewed.
 
@@ -368,6 +368,7 @@ Under the menu item "Changes (Sort by imported Change Entities)," all entries ba
 ### <a name="changesAll">Changes (All Change Lines)</a>
 
 ![Image 35](screenshots/Image_35.png)
+Image 35
 
 There is a tab with "V 3" and "old Version." The "old Version" view is only relevant if the History Log Module was used before version 3 and the migration has not yet been performed.
 
@@ -378,16 +379,20 @@ In a popup, all changes made to this entry and enabled for tracking via "Define 
 If there are already backups for this entry, an additional button appears in the last column, giving access to the associated backup PDFs (Images 36 and 38).
 
 ![Image 36](screenshots/Image_36.png)
+Image 36
 
 ![Image 37](screenshots/Image_37.png)
+Image 37
 
 ![Image 38](screenshots/Image_38.png)
+Image 38
 
 ## <a name="integratedFeatures">Integrated Features</a>
 
 ### <a name="internalLogging">Internal Logging</a>
 
 ![Image 40](screenshots/Image_40.png)
+Image 40
 
 Internal Logging includes two areas: the result of the last Health Check and the Internal Logging.
 
@@ -397,10 +402,12 @@ In Internal Logging, error messages that could occur during tracking, import, ba
 > Log entries are also saved as a PDF and deleted from the database when entries are archived.
 
 ![Image 39](screenshots/Image_39.png)
+Image 39
 
 ### <a name="healthCheck">Health Check</a>
 
 ![Image 41](screenshots/Image_42.png)
+Image 41
 
 If the start microflow is activated, the Health Check runs both when the app starts and (if the scheduler is activated) once a day at the specified time. It checks for possible synchronization issues and verifies whether the imported attributes, references, and entities are still up to date.
 
@@ -410,68 +417,79 @@ The Health Check can also be manually triggered by the button.
 
 
 ![Image 42](screenshots/Image_41.png)
-
+Image 42
 
 #### Possibel Messages in the Health Check:
 
-- Info
-    - Entity has no Generalisation, status is outdated. No longer tracked. → The generalization has been removed from an entity.
-    - Entity has generalization of the history log, but is currently not imported and is therefore not tracked. → The entity has generalization but was not imported.
+- _Info_
+    - **Entity has no Generalisation, status is outdated. No longer tracked.** → The generalization has been removed from an entity.
+    - **Entity has generalization of the history log, but is currently not imported and is therefore not tracked.** → The entity has generalization but was not imported.
 
-- Warnings
+- _Warnings_
 
-    - Attribute was imported. Tracking was disabled. → An attribute was either newly created or renamed after the entity was imported. Tracking was disabled and needs to be reconfigured.
+    - **Attribute was imported. Tracking was disabled.** → An attribute was either newly created or renamed after the entity was imported. Tracking was disabled and needs to be reconfigured.
 
-    - Reference was imported. Tracking was disabled. → A reference was changed or added. Tracking was disabled and needs to be reconfigured.
+    - **Reference was imported. Tracking was disabled.** → A reference was changed or added. Tracking was disabled and needs to be reconfigured.
 
-    - Attribute from Reference was imported. Tracking was disabled. → An attribute of a reference was changed or added. Tracking was disabled and needs to be reconfigured.
+    - **Attribute from Reference was imported. Tracking was disabled.** → An attribute of a reference was changed or added. Tracking was disabled and needs to be reconfigured.
 
-    - Entity does not exist, status is outdated. No longer tracked. → The tracked entity was either deleted or renamed. Tracking was disabled.
+    - **Entity does not exist, status is outdated. No longer tracked.** → The tracked entity was either deleted or renamed. Tracking was disabled.
 
-- Danger
+- _Danger_
 
-    - Attribute not existing in Database. Therefore it was deleted. → An attribute that is being tracked was deleted or renamed and no longer exists in its original configuration. Therefore, it was deleted.
+    - **Attribute not existing in Database. Therefore it was deleted.** → An attribute that is being tracked was deleted or renamed and no longer exists in its original configuration. Therefore, it was deleted.
 
-    - You should change the attribute that is used for display, otherwise the value is always null or a placeholder is used by the module. → This error only occurs if the History Log Module was used in a previous version and a calculated attribute was set as the display name.
+    - **You should change the attribute that is used for display, otherwise the value is always null or a placeholder is used by the module.** → This error only occurs if the History Log Module was used in a previous version and a calculated attribute was set as the display name.
 
-    - Reference not existing in Database. Therefore it was deleted. → A reference was renamed or deleted, so it was deleted.
+    - **Reference not existing in Database. Therefore it was deleted.** → A reference was renamed or deleted, so it was deleted.
 
-    - Change Entity was created. → The Change Entity is missing on a tracked entity. It was created.
+    - **Change Entity was created.** → The Change Entity is missing on a tracked entity. It was created.
 
-    - Attribute from Reference not existing in Database. Therefore it was deleted. → The attribute of a reference was not found, so this attribute was deleted from the History Log Module.
+    - **Attribute from Reference not existing in Database. Therefore it was deleted.** → The attribute of a reference was not found, so this attribute was deleted from the History Log Module.
 
-    - When tracking creation or deletion, at least one display name attribute must be set. Otherwise, no entry will be created and tracking is not possible. → If an entity is to be tracked with "create" and "delete," an attribute must also be tracked as the display name. Otherwise, tracking is not possible.
+    - **When tracking creation or deletion, at least one display name attribute must be set. Otherwise, no entry will be created and tracking is not possible.** → If an entity is to be tracked with "create" and "delete," an attribute must also be tracked as the display name. Otherwise, tracking is not possible.
 
 ### <a name="archiveZip">Archive & Zip Download</a>
 
 ![Image 43](screenshots/Image_43.png)
+Image 43
 
 Under "Archive", all generated PDFs from the Backup Scheduler are listed. Here, individual PDFs can be viewed and downloaded. Additionally, it is possible to download multiple PDFs as a ZIP file via "Export PDFs." There are two options: either download all PDFs older than a specific date or all PDFs within a date range, where the start date must be further in the past than the end date.
 
-
 ![Image 45: Preview PDF](screenshots/Image_45.png)
+Image 45: Preview PDF
+
 ![Image 44: PDF Archive](screenshots/Image_44.png)
+Image 44: PDF Archive
+
 ![Image 46: Download ZIP](screenshots/Image_46.png)
- 
+Image 46: Download ZIP 
 
 ## <a name="integration">Integration: Show Changes in Your Own App</a>
 
-If changes are to be displayed directly (and not via the History Log Module), there are two pre-made files under _UseMe/Template. Both are set as "exclude from Project" (Image 48).
+If changes are to be displayed directly (and not via the History Log Module), there are two pre-made files under `_UseMe/Template`. Both are set as "exclude from Project" (Image 48).
 
 Step 1: Create a button for the entry where the changes should be displayed (Image 49).
 
-Step 2: Include and copy the file History_View and the microflow ACT_HistoryLog into your project.
+Step 2: Include and copy the file `History_View` and the microflow ACT_HistoryLog into your project.
 
-Step 3: In the microflow ACT_HistoryLog, the entity from which the changes should be displayed must be passed as a parameter. Additionally, check if the correct view is selected under "Show Page." If the file from the HistoryLogModule is adapted, it should be copied into your own module and the linking adjusted accordingly. The view can also be used from the HistoryLog, but adjustments should be avoided.
+Step 3: In the microflow `ACT_HistoryLog`, the entity from which the changes should be displayed must be passed as a parameter. Additionally, check if the correct view is selected under "Show Page." If the file from the HistoryLogModule is adapted, it should be copied into your own module and the linking adjusted accordingly. The view can also be used from the HistoryLog, but adjustments should be avoided.
 
-The History_View shows the same content as the detail view of the changes in the HistoryLog under "Changes."
+The `History_View` shows the same content as the detail view of the changes in the HistoryLog under "Changes."
 
 User permissions may need to be updated if necessary.
 
 ![Image 48](screenshots/Image_48.png)
+Image 48
+
 ![Image 49](screenshots/Image_49.png)
+Image 49
+
 ![Image 50](screenshots/Image_50.png)
+Image 50
+
 ![Image 51](screenshots/Image_51.png)
+Image 51
 
 ## <a name="domainModel">Domain Model Description</a>
 #### Persistable Entities
