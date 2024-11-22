@@ -120,6 +120,7 @@ Image 1: Start Microflow for the Health Check
 ## <a name="usageWithoutEmail">Usage without Email Connector</a>
 
 **The following adjustments need to be made:**
+
 - `_UseMe → Overview` → Delete the Mailconfiguration section along with the surrounding container (Image 2).
 - Delete the folder `RelevantForEmailNotification → EmailNotification` or exclude the microflows (Image 3).
 - Exclude or delete `RelevantForEmailNotification → ConfigurationStart → ACT_EmailAccount_LaunchEmailConnectorOverview` 
