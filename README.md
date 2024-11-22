@@ -352,7 +352,7 @@ The final step of the email configuration is done on the History Log Module Over
 
 Here, a list of defined mail accounts appears next to the Email Connector field. Click on the bell to activate the account from which the emails should be sent.
 
-![Image 33](screenshots/Image_332.png)
+![Image 33](screenshots/Image_33.png)
 Image 33
 
 ## <a name="views">Views</a>
