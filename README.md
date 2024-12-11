@@ -30,24 +30,25 @@
     - [Archive & Zip Download](#archiveZip)
 - [Integration: Show Changes in Your Own App](#integration)
 - [Domain Model Description](#domainModel)
+- [Contact](#contact)
 
 
 
 
-## <a name="introduction">Introduction</a>
+## <a id="introduction">Introduction</a>
 
 The History Log module generates one or more log entries for monitored entities upon creation, modification, or deletion. <br>
 Additionally, changes to generalized entities with System.FileDocuments and System.Images can be monitored.<br>
 **_We use a microflow from the Email Connector Module that has been slightly adapted._**
 
  
-## <a name="documentation">Documentation</a>
-### <a name="generalNotes">General Notes</a>
+## <a id="documentation">Documentation</a>
+### <a id="generalNotes">General Notes</a>
 
 > [!CAUTION]
 > If entities have generalization and are defined, but the action "With Events" is set to "No" during a commit in a microflow, changes will not be logged!
 
-### <a name="settings01">Settings that can be configured</a>
+### <a id="settings01">Settings that can be configured</a>
 - It can be specified whether a log entry should be created upon the creation and or deletion of an entire entry.
 - Each attribute can be individually enabled or disabled for logging.
 - Each relationship to another entity can be separately enabled or disabled, including the setting of which attribute should be used for display.
@@ -58,7 +59,7 @@ Additionally, changes to generalized entities with System.FileDocuments and Syst
 - Calculated attributes cannot be tracked or defined as display names.
 - There is a feature to check and correct the synchronization status if necessary.
 
-## <a name="requirements">Requirements</a>
+## <a id="requirements">Requirements</a>
 - MxModelReflection
 - CommunityCommons
 - ZipHandling from Achmea
@@ -66,12 +67,12 @@ Additionally, changes to generalized entities with System.FileDocuments and Syst
     - Encryption
     - Email Connector
 
-## <a name="emailCon">When do I need the Email Connector?</a>
+## <a id="emailCon">When do I need the Email Connector?</a>
 
 When the Health Check Scheduler is activated, the History Log module scans daily at the defined time to check for issues. These are classified as information, warning, or critical, and the settings in the History Log module are updated accordingly. If there are critical discrepancies, an automated email can be sent to the responsible developer with information on what needs to be reconfigured. Additionally, all found entries are saved in the internal logging (older entries), while the latest messages are displayed in color on the overview page in the "Last Health Check" (blue for information, yellow for warnings, red for critical errors). More detailed information on the possible messages can be found under Health Check.
 
-## <a name="configuration">Configuration</a>
-### <a name="importMarketplace">Import Marketplace Moduls</a>
+## <a id="configuration">Configuration</a>
+### <a id="importMarketplace">Import Marketplace Moduls</a>
 
 - MxModelReflection
 - Community Commons
@@ -81,7 +82,7 @@ When the Health Check Scheduler is activated, the History Log module scans daily
     - Email Connector
 - History Log Module
 
-### <a name="possibleIssues">Possible Issues</a>
+### <a id="possibleIssues">Possible Issues</a>
 
 - **OQL Errors**
     - Update the layout of three pages: `ExamplePerson_NewEdit`, `ExampleOQL_Result`, `Example_Overview`.
@@ -91,7 +92,7 @@ When the Health Check Scheduler is activated, the History Log module scans daily
     - Edit the action button "Edit" and open the page settings to update the settings.
     - Update all renamed design properties in the project.
 
-### <a name="configImportedModules">Configuration of Imported Modules</a>
+### <a id="configImportedModules">Configuration of Imported Modules</a>
 
 - **Configuration Encryption (if Email Connector is used)**
     - Set constants according to: [Encryption](https://docs.mendix.com/appstore/modules/encryption/)
@@ -117,7 +118,7 @@ When the Health Check Scheduler is activated, the History Log module scans daily
 Image 1: Start Microflow for the Health Check
 
 
-## <a name="usageWithoutEmail">Usage without Email Connector</a>
+## <a id="usageWithoutEmail">Usage without Email Connector</a>
 
 **The following adjustments need to be made:**
 
@@ -152,8 +153,8 @@ Image 6: Delete Buttons RelevantForEmailNotification/Settings/Overview_Settings
 ![Image 7: Delete Activity RelevantForEmailNotification/HealthCheckFlows/SUB_UpdateSetting](screenshots/Image_07.png)
 Image 7: Delete Activity RelevantForEmailNotification/HealthCheckFlows/SUB_UpdateSetting
 
-## <a name="basicConfig">Basic Configuration of the History Log Module</a>
-### <a name="setGeneralization">Set Generalization</a>
+## <a id="basicConfig">Basic Configuration of the History Log Module</a>
+### <a id="setGeneralization">Set Generalization</a>
 
 All entities in the Domain Model (Image 8) that should be tracked by the History Log need to be generalized with the SuperClass from the HistoryLog Module. To do this, open the entity settings in the Domain Model and select the SuperClass from the HistoryLogModule under Generalization (Image 9).
 
@@ -168,7 +169,7 @@ Image 9: Select Generalization
 ![Image 10: Update Security](screenshots/Image_10.png)
 Image 10: Update Security
 
-### <a name="setEventHandler">Set Event Handlers on Already Generalized Entities</a> 
+### <a id="setEventHandler">Set Event Handlers on Already Generalized Entities</a> 
 
 If the entity is used for file management and thus already has a generalization, the corresponding microflows for `FileDocument` or `Image` must be used.
 
@@ -187,7 +188,7 @@ Open the entity: `Event handlers → New`
 ![Bild 11: Event Handler von Entities](screenshots/Image_11.png)
 Bild 11: Event Handler von Entities
 
-### <a name="scheduler">Scheduler</a>
+### <a id="scheduler">Scheduler</a>
 
 When the app is deployed, the following schedulers should be activated on the Mendix App management page:
 
@@ -203,7 +204,7 @@ When the app is deployed, the following schedulers should be activated on the Me
 
 The times can be adjusted in the app under `HistoryLogModule/_UseMe -> SCE_Archive` & `SCE_HealthCheck`. It is recommended to run the schedulers at times when few or no users are actively using the app, with a time offset.
 
-### <a name="firstConfigSteps">First configuration Steps</a>
+### <a id="firstConfigSteps">First configuration Steps</a>
 
 ![Image 12: Overview Page History Log](screenshots/Image_12.png)
 Image 12: Overview Page History Log
@@ -211,7 +212,7 @@ Image 12: Overview Page History Log
 The "first configuration steps" guide you through the basic configuration. These include Sync Entities, Define Modules, Settings, and optionally proceed to Mail Configuration. The individual steps are described in more detail below.
 
 
-### <a name="syncEntities">Sync Entities</a>
+### <a id="syncEntities">Sync Entities</a>
 
 ![Image 13: Overview Page History Log](screenshots/Image_13.png)
 Image 13: Overview Page History Log
@@ -241,7 +242,7 @@ Image 16: Sync Entity Page
 Synchronization should definitely be done BEFORE importing the template, as the set attributes are then automatically adopted.
 
 
-### <a name="defineModule">Define Module</a>
+### <a id="defineModule">Define Module</a>
 
 ![Image 17: Overview Page History Log](screenshots/Image_17.png)
 Image 17: Overview Page History Log
@@ -270,7 +271,7 @@ Image 20: Define Entities
 > [!IMPORTANT]
 > If creation/deletion is to be tracked, an attribute with DisplayName must be activated for tracking.
 
-### <a name="settings02">Settings</a>
+### <a id="settings02">Settings</a>
 
 ![Image 21: Overview Page History Log](screenshots/Image_21.png)
 Image 21: Overview Page History Log
@@ -285,7 +286,7 @@ By default, all tracking entries older than 90 days or if there are more than 50
 
 These values can be adjusted by the administrator. A PDF is generated for each entry with all relevant information. The backup date, the GuId of the original entry, and the configured display name (in shortened form) are used for identifying the PDFs.
 
-### <a name="settingEmailCon">Settings with the Email Connector</a>
+### <a id="settingEmailCon">Settings with the Email Connector</a>
 
 ![Bild 23: Setting Mail Notification](screenshots/Image_23.png)
 Bild 23: Setting Mail Notification
@@ -317,7 +318,7 @@ Image 26
 ![Image 27](screenshots/Image_27.png)
 Image 27
 
-### <a name="importMailTemp">Import Email Template with Email Connector</a>
+### <a id="importMailTemp">Import Email Template with Email Connector</a>
 
 ![Image 28](screenshots/Image_28.png) 
 Image 28
@@ -355,9 +356,9 @@ Here, a list of defined mail accounts appears next to the Email Connector field.
 ![Image 33](screenshots/Image_33.png)
 Image 33
 
-## <a name="views">Views</a>
+## <a id="views">Views</a>
 
-### <a name="changesChangeEntitie">Changes (Sort by imported Change Entities)</a>
+### <a id="changesChangeEntitie">Changes (Sort by imported Change Entities)</a>
 
 ![Image 34](screenshots/Image_34.png)
 Image 34
@@ -366,7 +367,7 @@ Under the menu item "Changes (Sort by imported Change Entities)," all entries ba
 
 
 
-### <a name="changesAll">Changes (All Change Lines)</a>
+### <a id="changesAll">Changes (All Change Lines)</a>
 
 ![Image 35](screenshots/Image_35.png)
 Image 35
@@ -388,9 +389,9 @@ Image 37
 ![Image 38](screenshots/Image_38.png)
 Image 38
 
-## <a name="integratedFeatures">Integrated Features</a>
+## <a id="integratedFeatures">Integrated Features</a>
 
-### <a name="internalLogging">Internal Logging</a>
+### <a id="internalLogging">Internal Logging</a>
 
 ![Image 40](screenshots/Image_40.png)
 Image 40
@@ -405,7 +406,7 @@ In Internal Logging, error messages that could occur during tracking, import, ba
 ![Image 39](screenshots/Image_39.png)
 Image 39
 
-### <a name="healthCheck">Health Check</a>
+### <a id="healthCheck">Health Check</a>
 
 ![Image 41](screenshots/Image_42.png)
 Image 41
@@ -450,7 +451,7 @@ Image 42
 
     - **When tracking creation or deletion, at least one display name attribute must be set. Otherwise, no entry will be created and tracking is not possible.** → If an entity is to be tracked with "create" and "delete," an attribute must also be tracked as the display name. Otherwise, tracking is not possible.
 
-### <a name="archiveZip">Archive & Zip Download</a>
+### <a id="archiveZip">Archive & Zip Download</a>
 
 ![Image 43](screenshots/Image_43.png)
 Image 43
@@ -466,7 +467,7 @@ Image 44: PDF Archive
 ![Image 46: Download ZIP](screenshots/Image_46.png)
 Image 46: Download ZIP 
 
-## <a name="integration">Integration: Show Changes in Your Own App</a>
+## <a id="integration">Integration: Show Changes in Your Own App</a>
 
 If changes are to be displayed directly (and not via the History Log Module), there are two pre-made files under `_UseMe/Template`. Both are set as "exclude from Project" (Image 48).
 
@@ -492,7 +493,7 @@ Image 50
 ![Image 51](screenshots/Image_51.png)
 Image 51
 
-## <a name="domainModel">Domain Model Description</a>
+## <a id="domainModel">Domain Model Description</a>
 #### Persistable Entities
 
 **DisplayTheName**
@@ -558,3 +559,9 @@ Image 51
 - Needed for email notifications. Automated emails can be sent for critical issues to notify a developer (e.g., attributes were changed and not updated in the HistoryLog Module).
 
 ![Screenshot of the Domain Model](screenshots/Image_52.png)
+
+
+## <a id="contact">Contact</a>
+
+For queries, feedback or to report bugs, please use the following e-mail address:
+[History Log Support](mailto:mendix@avocodo.com?subject=[HistoryLog]%20Request)
