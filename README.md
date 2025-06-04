@@ -488,6 +488,9 @@ When transferring the application between environments (e.g., from Test to Accep
 > - The **email configuration** (SMTP credentials, mail account settings) is **not included** in the export for security reasons and must be set manually in each environment.
 > - Individual JSON files can also be uploaded and imported if only partial configuration is needed.
 
+> [!CAUTION]
+> The commons-collections-3.2.2.jar library has been added to the module’s vendorlib directory and is now integrated in the Settings for internal use. 
+
 > [!NOTE]
 > This feature helps maintain consistent setups across environments and saves time during deployments or project handovers.
 
