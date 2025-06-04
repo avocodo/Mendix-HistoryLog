@@ -28,6 +28,7 @@
     - [Internal Logging](#internalLogging)
     - [Health Check](#healthCheck)
     - [Archive & Zip Download](#archiveZip)
+    - [Export & Import Configuration](#exportImport)
 - [Integration: Show Changes in Your Own App](#integration)
 - [Domain Model Description](#domainModel)
 - [Contact](#contact)
@@ -62,7 +63,6 @@ Additionally, changes to generalized entities with System.FileDocuments and Syst
 ## <a id="requirements">Requirements</a>
 - MxModelReflection
 - CommunityCommons
-- ZipHandling from Achmea
 - Optional
     - Encryption
     - Email Connector
@@ -466,6 +466,31 @@ Image 44: PDF Archive
 
 ![Image 46: Download ZIP](screenshots/Image_46.png)
 Image 46: Download ZIP 
+
+### <a id="exportImport">Export & Import – Download Settings & Change Entities with all relevant Definitions</a>
+
+This feature allows you to export and re-import all relevant configuration data from the History Log module to streamline environment migration and setup consistency.
+
+#### What’s included in the export?
+- All configured **Change Entities**, including tracked entities, attributes, references, and custom display names  
+- All **Settings** (excluding the email configuration for security reasons)
+
+The export creates a **ZIP archive** containing structured JSON files for each configuration section.
+
+#### Typical use case: Environment change
+When transferring the application between environments (e.g., from Test to Acceptance or Production), you can:
+
+1. Download the configuration via **Export & Import** on the Overview page.
+2. Upload the previously exported JSON files in the new environment.
+3. Apply the configuration automatically using the module's import logic.
+
+> [!CAUTION]
+> - The **email configuration** (SMTP credentials, mail account settings) is **not included** in the export for security reasons and must be set manually in each environment.
+> - Individual JSON files can also be uploaded and imported if only partial configuration is needed.
+
+> [!NOTE]
+> This feature helps maintain consistent setups across environments and saves time during deployments or project handovers.
+
 
 ## <a id="integration">Integration: Show Changes in Your Own App</a>
 
